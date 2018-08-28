@@ -11,18 +11,19 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {  //t
      const db = client.db('TodoApp') // access referencing to the database
 
     // ** THIS RETRIEVE BY ID, TEXT OR COMPLETED USING .toArray()
-     db.collection('Todos').find({  // mongodb returns a cursor w/c is toArray, then toArray return a promise w/c is the docs or records and display it in a callback
-         //_id: new ObjectID('5b837dfc17bd4b9a344b8d6f') // retrievin by objectID
-         text: 'Something to do'  // retrieving by text
-        // completed: true  // retrieving by completed
-        }).toArray().then((docs) => {// find{} is the query argu
-        console.log('Todos');
-        console.log(JSON.stringify(docs,undefined,2)); 
-     }, (err) => {
-         console.log('Unable to fetch todos', err);
-     }); 
+    //  db.collection('Todos').find(//{   mongodb returns a cursor w/c is toArray, then toArray return a promise w/c is the docs or records and display it in a callback
+    //      //_id: new ObjectID('5b837dfc17bd4b9a344b8d6f') // retrievin by objectID
+    //     //  text: 'Something to do'  // retrieving by text
+    //     // completed: true  // retrieving by completed
+    //     //    }
+    // ).toArray().then((docs) => {// find{} is the query argu
+    //     console.log('Todos');
+    //     console.log(JSON.stringify(docs,undefined,2)); 
+    //  }, (err) => {
+    //      console.log('Unable to fetch todos', err);
+    //  }); 
 
-     // ** THIS DISPLAY THE TOTAL COUNT using .count()
+     //** THIS DISPLAY THE TOTAL COUNT using .count()
     // db.collection('Todos').find().count().then((count) => {// find{} is the query argu
     //    console.log(`Todos Count: ${count}`);
     // }, (err) => {

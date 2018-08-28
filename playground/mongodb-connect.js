@@ -28,8 +28,8 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {  //t
     // });
 
     // db.collection('Users').insertOne({
-    //     name: 'Ron Reyes',
-    //     age: 20,
+    //     name: 'Julie Reyes',
+    //     age: 22,
     //     location: 'Philippines'
     // }, (err, result) => { // this is the callback func
     //     if (err) {
@@ -38,7 +38,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {  //t
     //     console.log(result.ops[0]._id.getTimestamp()); // this print the timestamp
     // });
 
-    client.close(); // this close the db connection
+    // client.close(); // this close the db connection
 
 
 });
