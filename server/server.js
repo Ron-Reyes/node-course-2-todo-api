@@ -23,7 +23,11 @@ app.post('/todos', (req, res) => { // contain 2 args, 1 url app, 2, call func
 }); 
 
 app.get('/todos', (req, res) => {
-
+    Todo.find().then((todos) => {
+        res.send({todos}); 
+    }, (e) => {
+        res.status(400).send(e);
+    })
 });
 
 
