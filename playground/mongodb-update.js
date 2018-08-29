@@ -25,17 +25,17 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {  //t
     // });
 
     db.collection('Users').findOneAndUpdate({
-        _d: new ObjectID('5b84ae72a1e1201874da83e0')
+            _id: new ObjectID('5b84ae72a1e1201874da83e0')
         }, {
-            $set:{
-                name: 'Princess Anica Reyes'
+            $set: {
+                name: 'Anica Reyes'     //should need to define also the returnOriginal to false
             },
-            $inc:{
-                age: 1   // this increment the existing value by +1 2+1=3
+            $inc: {
+                age: 1
             }
         }, {
-            returnOriginal: false 
-       }
+            returnOriginal: false  // this is needed to set to false in order to take the effect the changes in completed = true above
+        }
     ).then((result) => {
         console.log(result);
     });
