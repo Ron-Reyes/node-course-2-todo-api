@@ -9,9 +9,7 @@ var app = express();
 
 app.use(bodyParser.json());  // it return a function that need to give to express
 
-
-
-// set up a route
+// set up a route localhost:3000/todos using post method
 app.post('/todos', (req, res) => { // contain 2 args, 1 url app, 2, call func
     var todo = new Todo({
         text: req.body.text   // .text is accessing the text property of the req.body
@@ -24,13 +22,16 @@ app.post('/todos', (req, res) => { // contain 2 args, 1 url app, 2, call func
     });
 }); 
 
+app.get('/todos', (req, res) => {
+
+});
 
 
 app.listen(3000, () => {
     console.log('Started on port 3000');
 });
 
-
+module.exports = {app};
 
 
 
