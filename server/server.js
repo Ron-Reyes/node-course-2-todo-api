@@ -44,8 +44,7 @@ app.get('/todos/:id', (req, res) => { // this create an id variable
     Todo.findById(id).then((todo) => {
         if(!todo){
             return res.status(404).send();
-        };                
-        // console.log(JSON.stringify(user,undefined,2));
+        };                        
         res.send({todo}); 
     }).catch((e) => {
         res.status(404).send();

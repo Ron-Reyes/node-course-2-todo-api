@@ -1,5 +1,6 @@
 const expect = require ('expect');
 const request = require('supertest');
+const {ObjectID} = require('mongodb');
 
 const {app}  = require('./../server')  // ../server is backing up 1 directory to access the server.js
 const {Todo} = require('./../models/todo'); 
@@ -7,23 +8,24 @@ const {Todo} = require('./../models/todo');
 
 // dummy todo data
 const todos = [{
-    text: 'First test todo',
-    }, {
-        text: 'Second test todo'
-    }   
-];
+    _id: new ObjectID(),
+    text: 'First test todo'
+  }, {
+    _id: new ObjectID(),
+    text: 'Second test todo'
+  }];
 
 
 // this clear or empty the db otherwise it will cause error
-beforeEach((done ) => {
+beforeEach((done) => {
     Todo.remove({}).then(() => {    // this assume remove all the todos in the db
         return Todo.insertMany(todos);    // the 2 todos in dummy, Inserts multiple documents into a collection
     }).then(() => done()); 
 });
 
 describe('POST /todos', () => {   // use describe to group all routes in the test
-    it('should create a new todo', (done) => {  // done is required in this line
-        var text = 'Test to do text 2';  // this is just a set up data
+    it('should create a  new todo', (done) => {  // done is required in this line
+        var text = 'Test todo text';  // this is just a set up data
 
         request(app)   // app is passed here where we make a request on
             .post('/todos')  // the url
@@ -74,6 +76,35 @@ describe('GET /todos', () => {
             .expect((res) => {
                 expect(res.body.todos.length).toBe(2);
             })
+            .end(done);
+    });
+});
+
+describe('GET /todos/:id', () => {
+    it('should return todo doc', (done) => {
+        request(app)            
+            .get(`/todos/${todos[0]._id.toHexString()}`)  //todos[0] referring to the 1st dummy data .id is the property of the 1st dummy data. 
+            //.toHexString() this convert the object to a string
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(todos[0].text);   // this expect that response body has a todo with text property
+            })
+            .end(done);
+    });
+
+    it('should return 404 if todo not found', (done) => {
+        var hexId = new ObjectID().toHexString();        
+
+        request(app)        
+            .get(`/todos/${hexId}}`)
+            .expect(404)           
+            .end(done);
+    });
+
+    it('should return 404 for non-object ids', (done) => {
+        request(app)
+            .get('/todos/123abc')   // id was just a set up to make the result to 404
+            .expect(404)
             .end(done);
     });
 });
