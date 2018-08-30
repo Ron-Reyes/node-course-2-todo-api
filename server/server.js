@@ -9,7 +9,7 @@ var {User} = require('./models/user');  //this uses destructuring for refactorin
 var app = express();
 
 // this can be set optionally: set it if running on heroku, do not set if running local
-const port = process.env.PORT || 3000;   // you have to set also the port below app.listen
+const port = 'mongodb://<ronreyes>:<P@nica0221>@ds237192.mlab.com:37192/mongo-data' || 3000;   // you have to set also the port below app.listen
 
 app.use(bodyParser.json());  // it return a function that need to give to express
 
