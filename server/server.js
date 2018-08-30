@@ -8,6 +8,9 @@ var {User} = require('./models/user');  //this uses destructuring for refactorin
 
 var app = express();
 
+// this can be set optionally: set it if running on heroku, do not set if running local
+const port = process.env.PORT || 3000;   // you have to set also the port below app.listen
+
 app.use(bodyParser.json());  // it return a function that need to give to express
 
 // set up a route localhost:3000/todos using post method
@@ -51,8 +54,8 @@ app.get('/todos/:id', (req, res) => { // this create an id variable
     });
 });   
 
-app.listen(3000, () => {
-    console.log('Started on port 3000');
+app.listen(port, () => {
+    console.log(`Started on port ${port}`);
 });
 
 module.exports = {app};
@@ -61,3 +64,4 @@ module.exports = {app};
 
 
 
+ 
