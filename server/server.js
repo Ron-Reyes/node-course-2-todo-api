@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser'); // take your json and covert it to an object
 
+var {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose'); // call the database connection
 var {Todo} = require('./models/todo');   // this uses destructuring for refactoring
 var {User} = require('./models/user');  //this uses destructuring for refactoring
@@ -30,6 +31,26 @@ app.get('/todos', (req, res) => {
     })
 });
 
+// GET /todos/5b864e649eb6dd27489d7f88   ==============================
+app.get('/todos/:id', (req, res) => { // this create an id variable
+    var id = req.params.id; // the response is "id": "5b864e649eb6dd27489d7f88"
+    
+    console.log(id);    
+    
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+
+    Todo.findById(id).then((todo) => {
+        if(!todo){
+            return res.status(404).send();
+        };                
+        // console.log(JSON.stringify(user,undefined,2));
+        res.send({todo}); 
+    }).catch((e) => {
+        res.status(404).send();
+    });
+});   
 
 app.listen(3000, () => {
     console.log('Started on port 3000');
