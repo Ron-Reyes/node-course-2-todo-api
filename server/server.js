@@ -54,6 +54,7 @@ app.get('/todos/:id', (req, res) => { // this create an id variable
     });
 });   
 
+//port is the const port above
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 });
