@@ -1,7 +1,8 @@
-var express = require('express');
-var bodyParser = require('body-parser'); // take your json and covert it to an object
+const _  = require ('lodash');
+const express = require('express');
+const bodyParser = require('body-parser'); // take your json and covert it to an object
+const {ObjectID} = require('mongodb');
 
-var {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose'); // call the database connection
 var {Todo} = require('./models/todo');   // this uses destructuring for refactoring
 var {User} = require('./models/user');  //this uses destructuring for refactoring
@@ -70,7 +71,7 @@ app.delete('/todos/:id', (req, res) => {
         return res.status(404).send();
     }
 
-    Todo.findByIdAndRemove (id).then((todo) => {
+    Todo.findByIdAndRemove(id).then((todo) => {
         if(!todo){
             return res.status(404).send();
         };
@@ -82,6 +83,37 @@ app.delete('/todos/:id', (req, res) => {
         res.status(400).send();
     });
 })
+
+
+//this is patch or update using http method
+app.patch('/todos/:id', (req, res) => {   // 
+    var id = req.params.id;  // grab the id
+    var body = _.pick(req.body,['text', 'completed']);  // this is the use of lodash here. text & completed are the arrays na kukuning under sa req.body (path only)
+
+    if(!ObjectID.isValid(id)) {  // this wil execute if id is invalid
+        return res.status(404).send();
+    }
+
+    if(_.isBoolean(body.completed) && body.completed) {  // this check if completed under body is boolean and body.completed is true
+        body.completedAt = new Date().getTime();// assign the javascript time stamp to the completedAt field in the database
+    } else {  // this execute if body.completed is not a boolean OR body.completed is false
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id,{$set: body}, {new: true}).then((todo) => { // new true is always in ther when you use $set along the line
+        if(!todo){
+            return res.status(404).send();            
+        }
+
+        res.send({todo});
+    }).catch((e) => {
+        res.status(400).send();
+    });
+
+});
+
+
 
 //port is the const port above
 app.listen(port, () => {
