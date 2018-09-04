@@ -1,3 +1,5 @@
+require('./config/config')  // configuring w/c environment is going to run
+
 const _  = require ('lodash');
 const express = require('express');
 const bodyParser = require('body-parser'); // take your json and covert it to an object
@@ -10,7 +12,7 @@ var {User} = require('./models/user');  //this uses destructuring for refactorin
 var app = express();
 
 // this can be set optionally: set it if running on heroku, do not set if running local
-const port = process.env.PORT || 3000;   // you have to set also the port below app.listen
+const port = process.env.PORT;   // you have to set also the port below app.listen
 //const port = 3000;   // you have to set also the port below app.listen
 
 app.use(bodyParser.json());  // it return a function that need to give to express
