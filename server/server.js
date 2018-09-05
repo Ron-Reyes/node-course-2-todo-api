@@ -112,9 +112,28 @@ app.patch('/todos/:id', (req, res) => {   //
     }).catch((e) => {
         res.status(400).send();
     });
-
 });
 
+//USER ============================================================================
+app.post('/users', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password']);  // this is the use of lodash here. email & password are the arrays na kukuning under sa req.body (path only)
+    var user = new User(body); // passing the value of var body as the value of user
+
+    //User.findByToken    // custom model method. take jwt token. find the individual user and return to caller
+    //user.generateAuthToken;   // this is an instance method. responsilbe for adding token to individual document
+
+    
+    user.save().then(() => {
+        //res.send(user);   // old saving method
+    return user.generateAuthToken(); // calling the user.js generateAuthToken
+        
+    }).then((token) => {
+        res.header('x-auth', token).send(user);   //send the token back to http response as header. header has 2 args: key or the header name, and the value to set 
+        //xauth is a customer header,
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
 
 
 //port is the const port above
@@ -124,9 +143,3 @@ app.listen(port, () => {
 });
 
 module.exports = {app};
-
-
-
-
-
- 
