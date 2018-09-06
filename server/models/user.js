@@ -69,6 +69,25 @@ UserSchema.methods.generateAuthToken = function() {   // didnt use arrow functio
     });
 };
 
+// this is in connection with serverjs private route
+UserSchema.statics.findByToken = function(token) {  // with argument : token
+    var User = this;   // this is model method. Uppercase. instance method use small letter (user like above)
+    var decoded;
+
+    try {    // try catch will use to check if there's an error and catch it
+        decoded = jwt.verify(token, 'abc123');
+    } catch (e) {        
+        return Promise.reject('test rejected');
+    }    
+
+    // if success
+    return User.findOne({    // this find the associated user if any
+        '_id': decoded._id,
+        'tokens.token' : token,  // tokens.token refer to the UserSchema tokens/token. and :token in function(token above)
+        'tokens.access' : 'auth'
+    })   
+};
+
 var User = mongoose.model('User', UserSchema);    
 
 module.exports = {User};

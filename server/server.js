@@ -8,7 +8,7 @@ const {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose'); // call the database connection
 var {Todo} = require('./models/todo');   // this uses destructuring for refactoring
 var {User} = require('./models/user');  //this uses destructuring for refactoring
-
+var {authenticate} = require('./middleware/authenticate');
 var app = express();
 
 // this can be set optionally: set it if running on heroku, do not set if running local
@@ -133,6 +133,12 @@ app.post('/users', (req, res) => {
     }).catch((e) => {
         res.status(400).send(e);
     });
+});
+
+// this is a private route
+// thil will also call the middleware(authenticate.js)
+app.get('/users/me', authenticate, (req, res) => {   
+        res.send(req.user);
 });
 
 
