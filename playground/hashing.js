@@ -1,18 +1,47 @@
 const {SHA256} = require('crypto-js')  // get the sha256 property in the crypto-js and use it also as variable
-
 const jwt = require('jsonwebtoken'); // a shorter version of crypto-js
+const bcrypt = require('bcryptjs');  // this encript input password befor saving to db
 
-var data = {
-    id : 10
-};
+// USING BCRYPT ---------------------------------------------
 
-// it has 2 argu, details that you want to sign(data), 123abc is the secret value
-var token = jwt.sign(data, '123abc')   // takes the object and signed it and create a hash and return a token value. the secret or salt is abc123
-console.log('Token : ', token);
+var password = '123abc!';
 
-// decoded value will not execute if found to be different from the token
-var decode = jwt.verify(token, '123abc');      // takes the token and secret and makesure the data is manipulated
-console.log('Decoded :', decode)
+// this encryp the password
+bcrypt.genSalt(10, (err, salt) => {  //genSalt is async func. it has 2 args. 1, number or rounds to use, 2 callback
+    bcrypt.hash(password, salt, (err, hash) =>{  // it has 3 args, 1 thing to hash. 2 is the salt, 3 callback. the hash will be the one to save to db
+    console.log(hash);
+    });
+});
+
+// this decryp the password
+
+var hashedPassword = '$2a$10$p3O74AkIy22KZS2QM5wANeojUsNma8VNpzsw5rNZWhfxmkgHPNm7.';
+
+bcrypt.compare(password, hashedPassword, (err, result) => {   //it has 3 args, 1 orig pw, 2 hashed pw, 3 callback
+    // the result is either true or false, true if the same
+    console.log(result);
+})  
+
+
+
+// END USING BCRYPT ---------------------------------------------
+
+
+
+
+
+
+// var data = {
+//     id : 10
+// };
+
+// // it has 2 argu, details that you want to sign(data), 123abc is the secret value
+// var token = jwt.sign(data, '123abc')   // takes the object and signed it and create a hash and return a token value. the secret or salt is abc123
+// console.log('Token : ', token);
+
+// // decoded value will not execute if found to be different from the token
+// var decode = jwt.verify(token, '123abc');      // takes the token and secret and makesure the data is manipulated
+// console.log('Decoded :', decode)
 
 
 //===============================================================================
